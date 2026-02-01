@@ -1,0 +1,18 @@
+---
+name: MobCleaner
+main: dev.promptt.mobcleaner.MobCleanerPlugin
+version: 2.0.0
+api-version: '1.21'
+description: Cleans up configured mobs in loaded chunks that are no longer within simulation distance of any online player.
+author: promptt
+
+commands:
+  mobcleaner:
+    description: Admin commands for MobCleaner.
+    usage: /mobcleaner <help|reload|sweep>
+    permission: mobcleaner.admin
+
+permissions:
+  mobcleaner.admin:
+    description: Allows using /mobcleaner.
+    default: op

@@ -1,0 +1,98 @@
+# MobCleaner configuration
+#
+# The goal: remove mobs that get "stuck" in loaded-but-not-entity-ticking chunks
+# (e.g., spawn chunks, chunk loaders, or plugins that keep chunks loaded) once no player
+# is within simulation distance.
+#
+# By default, MobCleaner targets *hostile mobs* that are *non-persistent* (i.e., the server
+# is allowed to despawn them when far away). This keeps the plugin conservative.
+
+triggers:
+  # Run a cleanup around the player’s last position after they disconnect.
+  on-logout: true
+
+  # Run a cleanup around the FROM location when a player teleports far enough away that
+  # the FROM area would fall outside simulation distance.
+  on-teleport: true
+
+world-filter:
+  # If whitelist is non-empty, MobCleaner only runs in worlds listed here.
+  whitelist: []
+
+  # Worlds listed here are always skipped.
+  blacklist: []
+
+radius:
+  # How far (in chunks) MobCleaner considers a player to "cover" chunks.
+  #
+  # simulation-distance: uses the world simulation distance (preferred).
+  # view-distance: uses the server view distance.
+  # fixed: uses fixed-chunks.
+  mode: simulation-distance
+
+  # Only used when mode is fixed.
+  fixed-chunks: 6
+
+  # Optional per-world overrides by world name.
+  #per-world:
+  #  world_nether:
+  #    mode: fixed
+  #    fixed-chunks: 4
+
+entities:
+  # If true, only hostile mobs (Entity instanceof Monster) are eligible.
+  hostile-only: true
+
+  # If true, only mobs where LivingEntity#getRemoveWhenFarAway() is true are removed.
+  # This tends to exclude named/persistent mobs and makes the plugin safer.
+  only-remove-when-far-away: true
+
+  # If true, mobs with a custom name are skipped.
+  ignore-named: true
+
+  # If true, tamed mobs are skipped.
+  ignore-tamed: true
+
+  # If true, leashed mobs are skipped.
+  ignore-leashed: true
+
+  # If non-empty, only entity types in this list are eligible (case-insensitive).
+  # Example: [ZOMBIE, SKELETON]
+  include: []
+
+  # Entity types in this list are never removed (case-insensitive).
+  # Example: [WITHER, ENDER_DRAGON]
+  exclude:
+    - WITHER
+    - ENDER_DRAGON
+
+execution:
+  # Delay before running an event-triggered cleanup.
+  # 1 tick is recommended so Paper has updated world.getPlayers() after logout/teleport.
+  delay-ticks: 1
+
+  # Maximum chunks to process per tick when cleaning a region.
+  # Set to 0 to process everything in one tick (may cause a spike if radius is large).
+  max-chunks-per-tick: 0
+
+  logging:
+    # Logs a one-line summary after each cleanup.
+    summary: false
+
+    # Logs per-chunk removals (very spammy).
+    per-chunk: false
+
+sweep-task:
+  # Optional periodic sweep that scans loaded chunks and cleans those not covered by any player.
+  #
+  # WARNING: This can be heavier than event-driven cleanup depending on how many chunks are loaded.
+  enabled: false
+
+  # How often to run (in ticks). 20 ticks = 1 second.
+  interval-ticks: 1200
+
+  # Hard limit on chunks inspected per run (per world, approximately).
+  max-chunks-per-run: 500
+
+  # If non-empty, only sweep these worlds.
+  worlds: []
