@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'dev.promptt'
-version = '2.0.0'
+version = '2.1.0-beta.1'
 
 def pluginNameProp = providers.gradleProperty('pluginName').orElse('MobCleaner').get()
 
@@ -13,19 +13,21 @@ repositories {
 }
 
 dependencies {
-    // Compile against Paper API for 1.21.x
-    compileOnly "io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT"
+    // Compile against Paper API for 26.2 (new calendar versioning scheme)
+    compileOnly "io.papermc.paper:paper-api:26.2.build.121-stable"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    // Ensure bytecode targets Java 21.
-    options.release.set(21)
+    // Ensure bytecode targets Java 25.
+    options.release.set(25)
+    // Surface deprecated API usage during the 1.21 -> 26.2 migration.
+    options.compilerArgs << '-Xlint:deprecation'
 }
 
 tasks.jar {

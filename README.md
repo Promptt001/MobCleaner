@@ -22,8 +22,8 @@ MobCleaner enforces the “these mobs should go away when nobody is around” be
 
 ## Compatibility
 
-- **Server:** Paper **1.21.x**
-- **Java:** **21** (required by Paper 1.21.x)
+- **Server:** Paper **26.2**
+- **Java:** **25** (required by Paper 26.2)
 
 ---
 

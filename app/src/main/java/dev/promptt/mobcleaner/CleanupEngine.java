@@ -264,7 +264,7 @@ public final class CleanupEngine {
                 continue;
             }
 
-            if (rules.ignoreNamed && entity.getCustomName() != null) {
+            if (rules.ignoreNamed && entity.customName() != null) {
                 continue;
             }
 

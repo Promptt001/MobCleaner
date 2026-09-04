@@ -1,5 +1,7 @@
 package dev.promptt.mobcleaner;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -169,7 +171,7 @@ public final class MobCleanerPlugin extends JavaPlugin implements Listener, Comm
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission(ADMIN_PERMISSION)) {
-            sender.sendMessage("You do not have permission (" + ADMIN_PERMISSION + ").");
+            sender.sendMessage(Component.text("You do not have permission (" + ADMIN_PERMISSION + ").", NamedTextColor.RED));
             return true;
         }
 
@@ -183,12 +185,12 @@ public final class MobCleanerPlugin extends JavaPlugin implements Listener, Comm
             case "reload" -> {
                 reloadSettings();
                 rescheduleSweepTask();
-                sender.sendMessage("MobCleaner reloaded.");
+                sender.sendMessage(Component.text("MobCleaner reloaded.", NamedTextColor.GREEN));
                 return true;
             }
             case "sweep" -> {
                 engine.runSweep(this, settings);
-                sender.sendMessage("MobCleaner sweep triggered.");
+                sender.sendMessage(Component.text("MobCleaner sweep triggered.", NamedTextColor.GREEN));
                 return true;
             }
             default -> {
@@ -199,9 +201,15 @@ public final class MobCleanerPlugin extends JavaPlugin implements Listener, Comm
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage("MobCleaner commands:");
-        sender.sendMessage("/mobcleaner reload - Reload config.yml");
-        sender.sendMessage("/mobcleaner sweep  - Run one sweep pass now (respects sweep-task settings)");
+        sender.sendMessage(
+                Component.text("MobCleaner commands:", NamedTextColor.GOLD)
+                        .append(Component.newline())
+                        .append(Component.text("/mobcleaner reload", NamedTextColor.YELLOW)
+                                .append(Component.text(" - Reload config.yml", NamedTextColor.GRAY)))
+                        .append(Component.newline())
+                        .append(Component.text("/mobcleaner sweep", NamedTextColor.YELLOW)
+                                .append(Component.text("  - Run one sweep pass now (respects sweep-task settings)", NamedTextColor.GRAY)))
+        );
     }
 
     @Override
